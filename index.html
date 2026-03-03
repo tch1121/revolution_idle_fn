@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revolution Idle</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-start: #0f172a;
+      --bg-end: #1e1b4b;
+      --panel: rgba(15, 23, 42, 0.78);
+      --panel-border: rgba(148, 163, 184, 0.28);
+      --text-main: #e2e8f0;
+      --text-subtle: #94a3b8;
+      --btn-start: #60a5fa;
+      --btn-end: #6366f1;
+      --btn-hover-start: #3b82f6;
+      --btn-hover-end: #4f46e5;
+      --btn-shadow: rgba(59, 130, 246, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 36px 18px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top right, #312e81 0%, transparent 45%),
+        linear-gradient(135deg, var(--bg-start), var(--bg-end));
+    }
+
+    #dilation_tree {
+      width: min(880px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .node {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .node:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.45);
+    }
+
+    .node-text {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .copy-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--btn-start), var(--btn-end));
+      box-shadow: 0 8px 18px var(--btn-shadow);
+      transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .copy-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      background: linear-gradient(135deg, var(--btn-hover-start), var(--btn-hover-end));
+    }
+
+    .copy-btn:active {
+      transform: translateY(0);
+      filter: brightness(0.98);
+    }
+
+    .copy-btn.success {
+      background: linear-gradient(135deg, #34d399, #22c55e);
+      box-shadow: 0 8px 18px rgba(34, 197, 94, 0.36);
+    }
+
+    .content {
+      grid-column: 1 / -1;
+      margin-top: 4px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(15, 23, 42, 0.55);
+      padding: 12px;
+      color: var(--text-subtle);
+      font: 500 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+  <script src="./src/main.js"></script>
+</head>
+
+<body>
+  <div id="dilation_tree"></div>
+</body>
+
+</html>
