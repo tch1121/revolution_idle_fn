@@ -63,7 +63,7 @@ function main() {
       "content": "C1;T1,1,0,0;M2,0,0,0;B1,1,5,0",
     },
     {
-      "text": "DP 12 Respec",
+      "text": "DP 12",
       "content": "C5;T1,1,0,0;M0,0,0,0;B1,1,3,0",
     },
     {
