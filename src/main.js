@@ -5,6 +5,8 @@ function main() {
     return;
   }
 
+  const autoRedirectToggle = document.querySelector('#auto-redirect-toggle');
+
   const tree_config = [
     {
       "text": "DP 1",
@@ -239,6 +241,11 @@ function main() {
 
       copy_button.classList.add('success');
       copy_button.textContent = '已复制';
+
+      if (autoRedirectToggle && autoRedirectToggle.checked) {
+        window.location.href = 'unitydl://test';
+      }
+
       window.setTimeout(() => {
         copy_button.classList.remove('success');
         copy_button.textContent = original_text;

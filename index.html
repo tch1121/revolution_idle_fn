@@ -108,11 +108,82 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
+
+    .toggle-container {
+      width: min(880px, 100%);
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+    }
+
+    .toggle-label {
+      font-size: 15px;
+      font-weight: 600;
+      user-select: none;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 26px;
+      transition: background 0.25s ease;
+      cursor: pointer;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.25s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background: linear-gradient(135deg, var(--btn-start), var(--btn-end));
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+      transform: translateX(22px);
+    }
   </style>
   <script src="./src/main.js"></script>
 </head>
 
 <body>
+  <div class="toggle-container">
+    <label class="toggle-label" for="auto-redirect-toggle">复制后自动跳转</label>
+    <label class="toggle-switch">
+      <input type="checkbox" id="auto-redirect-toggle">
+      <span class="toggle-slider"></span>
+    </label>
+  </div>
   <div id="dilation_tree"></div>
 </body>
 
