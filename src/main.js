@@ -243,7 +243,12 @@ function main() {
       copy_button.textContent = '已复制';
 
       if (autoRedirectToggle && autoRedirectToggle.checked) {
-        window.location.href = 'unitydl://test';
+        const link = document.createElement('a');
+        link.href = 'unitydl://test';
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
 
       window.setTimeout(() => {
