@@ -219,11 +219,16 @@ function main() {
     text_element.textContent = node.text;
     node_element.appendChild(text_element);
 
-    const copy_button = document.createElement('button');
-    copy_button.type = 'button';
+    const copy_button = document.createElement('a');
     copy_button.classList.add('copy-btn');
     copy_button.textContent = '复制内容';
-    copy_button.addEventListener('click', async () => {
+    copy_button.addEventListener('click', async (e) => {
+      if (!autoRedirectToggle || !autoRedirectToggle.checked) {
+        e.preventDefault();
+      } else {
+        copy_button.href = 'unitydl://test';
+      }
+
       const original_text = copy_button.textContent;
       try {
         await navigator.clipboard.writeText(node.content);
@@ -241,15 +246,6 @@ function main() {
 
       copy_button.classList.add('success');
       copy_button.textContent = '已复制';
-
-      if (autoRedirectToggle && autoRedirectToggle.checked) {
-        const link = document.createElement('a');
-        link.href = 'unitydl://test';
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
 
       window.setTimeout(() => {
         copy_button.classList.remove('success');

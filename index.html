@@ -68,6 +68,8 @@
     }
 
     .copy-btn {
+      display: inline-block;
+      text-decoration: none;
       border: none;
       border-radius: 999px;
       padding: 8px 14px;
@@ -165,11 +167,11 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     }
 
-    .toggle-switch input:checked + .toggle-slider {
+    .toggle-switch input:checked+.toggle-slider {
       background: linear-gradient(135deg, var(--btn-start), var(--btn-end));
     }
 
-    .toggle-switch input:checked + .toggle-slider::before {
+    .toggle-switch input:checked+.toggle-slider::before {
       transform: translateX(22px);
     }
   </style>
