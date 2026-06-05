@@ -6,6 +6,21 @@ function main() {
   }
 
   const autoRedirectToggle = document.querySelector('#auto-redirect-toggle');
+  const hideContentToggle = document.querySelector('#hide-content-toggle');
+
+  // 监听隐藏内容开关
+  if (hideContentToggle) {
+    hideContentToggle.addEventListener('change', () => {
+      const allContent = document.querySelectorAll('.content');
+      allContent.forEach(content => {
+        if (hideContentToggle.checked) {
+          content.classList.add('hidden');
+        } else {
+          content.classList.remove('hidden');
+        }
+      });
+    });
+  }
 
   const tree_config = [
     {
@@ -213,51 +228,52 @@ function main() {
   tree_config.forEach((node) => {
     const node_element = document.createElement('div');
     node_element.classList.add('node');
+    node_element.style.cursor = 'pointer';
 
     const text_element = document.createElement('span');
     text_element.classList.add('node-text');
     text_element.textContent = node.text;
     node_element.appendChild(text_element);
 
-    const copy_button = document.createElement('a');
-    copy_button.classList.add('copy-btn');
-    copy_button.textContent = '复制内容';
-    copy_button.addEventListener('click', async (e) => {
-      if (!autoRedirectToggle || !autoRedirectToggle.checked) {
-        e.preventDefault();
-      } else {
-        copy_button.href = 'unitydl://test';
-      }
+    node_element.addEventListener('click', async (e) => {
+      const shouldRedirect = autoRedirectToggle && autoRedirectToggle.checked;
 
-      const original_text = copy_button.textContent;
+      // 先复制内容
+      const original_text = text_element.textContent;
       try {
         await navigator.clipboard.writeText(node.content);
+
+        // 显示复制成功反馈
+        text_element.textContent = '✓ 已复制';
+        node_element.style.transform = 'scale(0.98)';
+
+        // 复制完成后再跳转
+        if (shouldRedirect) {
+          setTimeout(() => {
+            window.location.href = 'unitydl://test';
+          }, 200);
+        }
+
+        setTimeout(() => {
+          text_element.textContent = original_text;
+          node_element.style.transform = '';
+        }, 1000);
       } catch (_error) {
-        const temp_input = document.createElement('textarea');
-        temp_input.value = node.content;
-        temp_input.setAttribute('readonly', '');
-        temp_input.style.position = 'absolute';
-        temp_input.style.left = '-9999px';
-        document.body.appendChild(temp_input);
-        temp_input.select();
-        document.execCommand('copy');
-        document.body.removeChild(temp_input);
+        // 浏览器不支持 Clipboard API
+        text_element.textContent = '✗ 浏览器不支持 Clipboard API';
+        setTimeout(() => {
+          text_element.textContent = original_text;
+        }, 2000);
       }
-
-      copy_button.classList.add('success');
-      copy_button.textContent = '已复制';
-
-      window.setTimeout(() => {
-        copy_button.classList.remove('success');
-        copy_button.textContent = original_text;
-      }, 1000);
     });
-    node_element.appendChild(copy_button);
 
     app.appendChild(node_element);
 
     const content_element = document.createElement('div');
     content_element.classList.add('content');
+    if (hideContentToggle && hideContentToggle.checked) {
+      content_element.classList.add('hidden');
+    }
     content_element.textContent = node.content;
     node_element.appendChild(content_element);
   });
