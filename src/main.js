@@ -5,7 +5,6 @@ function main() {
     return;
   }
 
-  const autoRedirectToggle = document.querySelector('#auto-redirect-toggle');
   const hideContentToggle = document.querySelector('#hide-content-toggle');
 
   // 监听隐藏内容开关
@@ -235,35 +234,78 @@ function main() {
     text_element.textContent = node.text;
     node_element.appendChild(text_element);
 
-    node_element.addEventListener('click', async (e) => {
-      const shouldRedirect = autoRedirectToggle && autoRedirectToggle.checked;
-
-      // 先复制内容
+    node_element.addEventListener('click', (e) => {
       const original_text = text_element.textContent;
-      try {
-        await navigator.clipboard.writeText(node.content);
 
-        // 显示复制成功反馈
-        text_element.textContent = '✓ 已复制';
-        node_element.style.transform = 'scale(0.98)';
+      // 显示反馈的辅助函数
+      function showFeedback(success) {
+        if (success) {
+          text_element.textContent = '✓ 已复制';
+          node_element.style.opacity = '0.7';
 
-        // 复制完成后再跳转
-        if (shouldRedirect) {
           setTimeout(() => {
-            window.location.href = 'unitydl://test';
-          }, 200);
+            text_element.textContent = original_text;
+            node_element.style.opacity = '';
+          }, 1000);
+        } else {
+          text_element.textContent = '✗ 复制失败';
+          setTimeout(() => {
+            text_element.textContent = original_text;
+          }, 2000);
         }
+      }
 
-        setTimeout(() => {
-          text_element.textContent = original_text;
-          node_element.style.transform = '';
-        }, 1000);
-      } catch (_error) {
-        // 浏览器不支持 Clipboard API
-        text_element.textContent = '✗ 浏览器不支持 Clipboard API';
-        setTimeout(() => {
-          text_element.textContent = original_text;
-        }, 2000);
+      // 备用复制方法
+      function fallbackCopy() {
+        try {
+          const textarea = document.createElement('textarea');
+          textarea.value = node.content;
+          textarea.style.position = 'fixed';
+          textarea.style.top = '0';
+          textarea.style.left = '-9999px';
+          textarea.style.opacity = '0';
+          textarea.style.pointerEvents = 'none';
+          textarea.setAttribute('readonly', '');
+          document.body.appendChild(textarea);
+
+          // 在 iOS 上需要特殊处理
+          const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+          if (isIOS) {
+            const range = document.createRange();
+            range.selectNodeContents(textarea);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            textarea.setSelectionRange(0, textarea.value.length);
+          } else {
+            textarea.select();
+          }
+
+          const success = document.execCommand('copy');
+          document.body.removeChild(textarea);
+          return success;
+        } catch (err) {
+          console.error('execCommand failed:', err);
+          return false;
+        }
+      }
+
+      // 优先使用现代 Clipboard API
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(node.content)
+          .then(() => {
+            showFeedback(true);
+          })
+          .catch((error) => {
+            console.error('Clipboard API failed:', error);
+            // 如果 Clipboard API 失败，尝试备用方法
+            const success = fallbackCopy();
+            showFeedback(success);
+          });
+      } else {
+        // 如果不支持 Clipboard API，直接使用备用方法
+        const success = fallbackCopy();
+        showFeedback(success);
       }
     });
 

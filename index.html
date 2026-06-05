@@ -54,9 +54,13 @@
       background: var(--panel);
       backdrop-filter: blur(8px);
       box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
       cursor: pointer;
       user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      will-change: transform, opacity;
     }
 
     .node:hover {
@@ -180,16 +184,9 @@
 <body>
   <div class="toggle-container">
     <div class="toggle-item">
-      <label class="toggle-label" for="auto-redirect-toggle">复制后自动跳转</label>
-      <label class="toggle-switch">
-        <input type="checkbox" id="auto-redirect-toggle">
-        <span class="toggle-slider"></span>
-      </label>
-    </div>
-    <div class="toggle-item">
       <label class="toggle-label" for="hide-content-toggle">隐藏内容</label>
       <label class="toggle-switch">
-        <input type="checkbox" id="hide-content-toggle">
+        <input type="checkbox" id="hide-content-toggle" checked>
         <span class="toggle-slider"></span>
       </label>
     </div>
